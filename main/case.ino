@@ -189,7 +189,57 @@ void desvio_diagonal(){
 
 void resgate(){
   garra.write(179);
+  delay(10);
   forward();
   delay(300);
   garra.write(50);
+  delay(10);
+}
+
+
+bool search(){
+  unsigned long long int acc = 0;
+  unsigned long long int cnt = 0;
+  unsigned long long int now = 0;
+
+  now = ultrassonicRead(0);
+  while(ultrassonicRead(1)>5){
+    go_left();
+  }
+  while(true){
+    if(ultrassonicRead(2) < 5) break; 
+    acc+=ultrassonicRead(0);
+    cnt++;
+    go_right();
+  }
+  acc/=cnt;
+  if(now>=(acc-5) && now<=(acc+5)) return false;
+  return true;
+}//f, r, b, l
+void here(){
+  int n = 4;
+  while(n--){
+    if(search()) break;
+    giro_de_noventa_green('R');
+    delay(300);
+  }
+
+  while(ultrassonicRead(1)>5){
+    go_left();
+  }
+
+  int dist = ultrassonicRead(0);
+
+  while(ultrassonicRead(0)<dist){
+    go_right();
+  }
+
+  dist = ultrassonicRead(0);
+  
+  while(ultrassonicRead(0)<dist){
+    forward();
+  }
+  garra.write(179);
+  delay(10);
+  
 }

@@ -35,6 +35,7 @@ int blue1 = 0;
 #define RB 600 // Valor lido pelo sensor analógico
 
 void setup(){
+  garra.attach(30);
   for(int i = 0; i < sizeof(irs)/sizeof(int); i++){
       pinMode(irs[i], INPUT);
   }
@@ -60,14 +61,21 @@ void loop(){
   if(readRGBRight()==3&&readRGBLeft()==3){
      while(true){
       if(Serial.available() > 0){
-        int input = Serial.read();
-        if(input == 1){//get ball
+        auto input = Serial.readString();
+        if(input == "G"){//get ball
           resgate();
-        }else if(input == 2){//giro
+          here();
+        }else if(input == "F"){//giro
+          forward();
+        }else if(input == "B"){//giro
+          backward();
+        }else if(input == "SL"){//giro
           spinRobot('L');
-        }else if(input == 3){//esquerda
+        }else if(input == "SR"){//giro
+          spinRobot('R');
+        }else if(input == "L"){//esquerda
           go_left();
-        }else if(input == 4){//direita
+        }else if(input == "R"){//direita
           go_right();
         }
         
